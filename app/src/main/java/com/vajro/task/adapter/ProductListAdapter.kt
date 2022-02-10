@@ -15,14 +15,13 @@ import com.vajro.task.model.ProductsItem
  */
 class ProductListAdapter(
     private val context: Context,
-    private val productItem: List<ProductsItem?>?
+    private val productItem: List<ProductsItem?>?,
+    private val onAddClick:(Int,ProductsItem)->Unit,
+    private val onIncClick:(Int,Int?)->Unit,
+    private val onDecClick:(Int,Int?)->Unit
 ) :
     RecyclerView.Adapter<ProductListAdapter.ProductListHolder>() {
 
-//    fun refreshList(merchantList: Array<MerchantListResponseItem>) {
-//        this.merchantList = merchantList
-//        notifyDataSetChanged()
-//    }
 
     override fun onCreateViewHolder(
         parent: ViewGroup,
@@ -50,16 +49,24 @@ class ProductListAdapter(
         fun bind(item: ProductsItem?) {
             itemBinding.apply {
                 item?.apply {
-                    txtAdd.setOnClickListener {
-                        txtAdd.visibility=View.GONE
+                  if (addedQuantity>0){
+                      txtAdd.visibility=View.GONE
                         lnrAddQuantity.visibility=View.VISIBLE
+                      txtQuantity.text=addedQuantity.toString()
+                  }else{
+                      txtAdd.visibility=View.VISIBLE
+                      lnrAddQuantity.visibility=View.GONE
+                  }
+
+                    txtAdd.setOnClickListener {
+                        onAddClick(absoluteAdapterPosition,item)
                     }
                     btnInc.setOnClickListener {
-                        txtQuantity.text=(txtQuantity.text.toString().toInt()+1).toString()
+                        onIncClick(absoluteAdapterPosition,item.product_id?.toInt())
                     }
                     btnDes.setOnClickListener {
                        if ( txtQuantity.text.toString().toInt()>0){
-                           txtQuantity.text=(txtQuantity.text.toString().toInt()-1).toString()
+                           onDecClick(absoluteAdapterPosition,item.product_id?.toInt())
                        }
 
                     }
@@ -71,6 +78,5 @@ class ProductListAdapter(
                 }
             }
         }
-
     }
 }

@@ -12,12 +12,13 @@ data class ProductsItem(
 	val quantity: Int? = null,
 	val thumb: String? = null,
 	val price: String? = null,
-	val productId: String? = null,
+	val product_id: String? = null,
 	val name: String? = null,
 	val description: String? = null,
 	val id: String? = null,
 	val href: String? = null,
 	val sku: String? = null,
-	val zoomThumb: String? = null
+	val zoomThumb: String? = null,
+	var addedQuantity: Int = 0
 )
 
